@@ -10,12 +10,10 @@ def generate_advance_gorgon(url_params, data):
     return "0408" + md5(str_to_hash)[:28]
 
 def create_account(index):
-    print(f"[*] Starting Attempt #{index}...")
-    
+    print(f"--- Attempt #{index} ---")
     did = "".join(random.choices(string.digits, k=19))
     iid = "".join(random.choices(string.digits, k=19))
     email = f"user_{''.join(random.choices(string.ascii_lowercase, k=7))}@abbas.linkpc.net"
-    password = "Abbas" + "".join(random.choices(string.digits, k=5))
     
     params = f"device_id={did}&iid={iid}&aid=1233&version_code=200204&device_platform=android"
     payload = f"email={email}&type=1&app_id=1233"
@@ -32,20 +30,16 @@ def create_account(index):
         response = requests.post(url, data=payload, headers=headers, timeout=20)
         res = response.json()
         
+        # طباعة النتيجة مباشرة في الـ Logs لرؤيتها فوراً
         if res.get("message") == "success":
-            result = f"Success -> Email: {email} | Pass: {password} | DID: {did}"
-            print(f"✅ {result}")
-            with open("accounts_created.txt", "a") as f:
-                f.write(result + "\n")
+            print(f"RESULT: SUCCESS | Email: {email} | DID: {did}")
         else:
-            reason = res.get("data", {}).get("description", "Unknown Block")
-            print(f"❌ Failed: {reason}")
+            print(f"RESULT: FAILED | Reason: {res.get('data', {}).get('description', 'Unknown Block')}")
             
     except Exception as e:
-        print(f"⚠️ Connection Error: {e}")
+        print(f"CONNECTION ERROR: {e}")
 
 if __name__ == "__main__":
-    # تشغيل 3 محاولات تجريبية
     for i in range(1, 4):
         create_account(i)
-        time.sleep(5)
+        time.sleep(2)
