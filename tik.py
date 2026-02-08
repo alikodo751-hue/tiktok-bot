@@ -9,7 +9,8 @@ def generate_advance_gorgon(url_params, data):
     str_to_hash = f"{md5(url_params)}{md5(data)}"
     return "0408" + md5(str_to_hash)[:28]
 
-def create_account():
+def create_account(index):
+    print(f"[*] Starting attempt ({index})...")
     did = "".join(random.choices(string.digits, k=19))
     iid = "".join(random.choices(string.digits, k=19))
     email = f"user_{''.join(random.choices(string.ascii_lowercase, k=7))}@abbas.linkpc.net"
@@ -42,6 +43,6 @@ def create_account():
         print(f"⚠️ Error: {e}")
 
 if __name__ == "__main__":
-    for _ in range(3):
-        create_account()
-        time.sleep(2)
+    for i in range(1, 4):
+        create_account(i)
+        time.sleep(5)
