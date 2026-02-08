@@ -10,7 +10,8 @@ def generate_advance_gorgon(url_params, data):
     return "0408" + md5(str_to_hash)[:28]
 
 def create_account(index):
-    print(f"[*] Starting attempt ({index})...")
+    print(f"[*] Starting Attempt #{index}...")
+    
     did = "".join(random.choices(string.digits, k=19))
     iid = "".join(random.choices(string.digits, k=19))
     email = f"user_{''.join(random.choices(string.ascii_lowercase, k=7))}@abbas.linkpc.net"
@@ -32,17 +33,19 @@ def create_account(index):
         res = response.json()
         
         if res.get("message") == "success":
-            result = f"Email: {email} | Pass: {password} | DID: {did}"
-            print(f"✅ Success: {result}")
+            result = f"Success -> Email: {email} | Pass: {password} | DID: {did}"
+            print(f"✅ {result}")
             with open("accounts_created.txt", "a") as f:
                 f.write(result + "\n")
         else:
-            print(f"❌ Failed: {res.get('data', {}).get('description', 'Unknown Error')}")
+            reason = res.get("data", {}).get("description", "Unknown Block")
+            print(f"❌ Failed: {reason}")
             
     except Exception as e:
-        print(f"⚠️ Error: {e}")
+        print(f"⚠️ Connection Error: {e}")
 
 if __name__ == "__main__":
+    # تشغيل 3 محاولات تجريبية
     for i in range(1, 4):
         create_account(i)
         time.sleep(5)
